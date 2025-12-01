@@ -1,3 +1,49 @@
+<script setup lang="ts">
+import { ref, onMounted, onUnmounted, nextTick } from 'vue';
+import { useHead } from '#app'; // Nuxt 提供的 composable
+
+// 1. 狀態定義 (TypeScript: 使用 ref<boolean> 和 ref<number | null>)
+const isMenuOpen = ref<boolean>(false);
+const isLangOpen = ref<boolean>(false);
+const activeSet = ref<number | null>(null); // 追蹤哪個 set (1, 2, 3) 是展開的
+
+// 2. 導覽列開關動作
+const toggleMenu = () => {
+    isMenuOpen.value = !isMenuOpen.value;
+};
+
+// 3. 語言選單開關動作
+const toggleLang = (event: MouseEvent) => {
+    isLangOpen.value = !isLangOpen.value;
+
+    // 延遲執行 focus，以確保 select 元素在 DOM 中可點擊
+    if (isLangOpen.value) {
+        nextTick(() => {
+            const selectEl = (event.currentTarget as HTMLElement).querySelector('.select') as HTMLSelectElement;
+            selectEl?.focus();
+        });
+    }
+};
+
+// 4. 群組展開動作 (取代 title1/2/3 的點擊)
+const toggleGroup = (setNumber: number) => {
+    // 如果點擊的是當前展開的群組，則收起；否則展開新的群組
+    activeSet.value = activeSet.value === setNumber ? null : setNumber;
+};
+
+// 5. 滾動鎖定 (取代 body.classList.toggle('no-scroll'))
+useHead(() => ({
+    bodyAttrs: {
+        class: isMenuOpen.value ? 'no-scroll' : ''
+    }
+}));
+
+// 6. 處理 select 失去焦點時收起選單
+const closeLangOnBlur = () => {
+    isLangOpen.value = false;
+};
+</script>
+
 <template>
   <header>
       <h1>風の城水族館</h1>
@@ -21,7 +67,6 @@
                   name="q"
                   class="search-input"
                   placeholder="検索"
-                  required=""
                 />
                 <input type="submit" value="&#xf002;" class="search-button" />
               </form>
@@ -75,7 +120,7 @@
                   name="q"
                   class="search-input"
                   placeholder="検索"
-                  required=""
+
                 />
                 <input type="submit" value="&#xf002;" class="search-button" />
               </form>
