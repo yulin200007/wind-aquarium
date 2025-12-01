@@ -3,6 +3,9 @@
 // 移除 import path from 'path'; 等相關內容
 
 export default defineNuxtConfig({
+
+  ssr: false, 
+  target: 'static',
   modules: [
     '@nuxt/content',
   ],
