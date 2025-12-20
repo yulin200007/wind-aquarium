@@ -1,0 +1,1 @@
+export { default } from "file:///D:/%E5%9C%B0%E7%93%9C/%E8%87%AA%E4%B8%BB%E7%B7%B4%E7%BF%92/%E6%B0%B4%E6%97%8F%E9%A4%A8/code/wind-aquarium-website/node_modules/@nuxt/vite-builder/dist/runtime/vite-node.mjs"
